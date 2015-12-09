@@ -80,6 +80,7 @@ private:
 	void addNewRow(QString);
 	void activateControls(int);
 	void resizeEvent(QResizeEvent *);
+        QString getSuCmd();
 
 private slots:
 	void slot_wikiRequested();

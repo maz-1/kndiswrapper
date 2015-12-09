@@ -2,6 +2,22 @@
 #include <QDebug>
 #include <unistd.h>
 //
+QString kndiswrapper::getSuCmd()
+{
+    QStringList SuCandidates;
+    QString SuCmd("sudo"); 
+    SuCandidates << "kdesu" << "gksu" << "kdesudo" << "gksudo";
+    for (int i=0;i<SuCandidates.count();++i) {
+       QString rval;
+       rval = QStandardPaths::findExecutable(SuCandidates[i]);
+       if (QFileInfo(rval).isExecutable()) {
+             SuCmd = SuCandidates[i];
+             break;
+       }
+    }
+    return SuCmd;
+}
+
 kndiswrapper::kndiswrapper( QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
 {
 	//setupUi(this);
@@ -47,17 +63,7 @@ With the Quit Button you exit this application.");
 
         if (getuid() != 0){
             if (!disablerootcheck){
-                QStringList SuCandidates;
-                QString SuCmd; 
-                SuCandidates << "kdesu" << "gksu" << "kdesudo" << "gksudo";
-                for (int i=0;i<SuCandidates.count();++i) {
-                    QString rval;
-                    rval = QStandardPaths::findExecutable(SuCandidates[i]);
-                    if (QFileInfo(rval).isExecutable()) {
-                        SuCmd = SuCandidates[i];
-                        break;
-                    }
-                }
+                QString SuCmd = getSuCmd();
                 if (SuCmd != QString()) {
                     QProcess process;
                     process.startDetached(SuCmd+QString(" ")+QCoreApplication::applicationFilePath());
@@ -179,23 +185,23 @@ kndiswrapper::~kndiswrapper()
 
 
 void kndiswrapper::initWidget(){
+    QString SuCmd = getSuCmd();
     if (invokeSetup){
       QProcess launcher;
-      launcher.start("kdesu kndiswrapper --setup");
+      launcher.start(SuCmd + QString(" kndiswrapper --setup"));
       exit(0);
     }
 
     if (!disablerootcheck){
       if ((QString)getenv("HOME") != "/root"){
         QString launcher;
-        launcher = "kdesu ";
-        launcher = launcher + "\"kndiswrapper ";
+        launcher = SuCmd + " \"kndiswrapper ";
         if (QCoreApplication::arguments().count() > 1){
           for (int i=1; i < QCoreApplication::arguments().count();i++){
-            launcher = launcher + (QString)QCoreApplication::arguments()[i] + " ";
+            launcher += (QString)QCoreApplication::arguments()[i] + " ";
           }
         }
-        launcher = launcher + "\" &";
+        launcher += "\" &";
         QProcess restart;
         restart.start(launcher);
         exit(0);
