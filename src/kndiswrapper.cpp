@@ -1,7 +1,8 @@
 #include "kndiswrapper.h"
-#include <klocale.h>
+#include <QDebug>
+#include <unistd.h>
 //
-kndiswrapper::kndiswrapper( QWidget * parent, Qt::WFlags f) : QDialog(parent, f)
+kndiswrapper::kndiswrapper( QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
 {
 	//setupUi(this);
 
@@ -35,19 +36,35 @@ With the Quit Button you exit this application.");
 	disablenetconf=false;
 	invokeSetup=false;
         debug=false;
-	if (qApp->argc() > 1){
-		for (int i=0; i < qApp->argc();i++){
-			if ((QString)qApp->argv()[i] == "--disablerootcheck") disablerootcheck=true;
-			if ((QString)qApp->argv()[i] == "--setup") invokeSetup=true;
-			if ((QString)qApp->argv()[i] == "--disablenetconf") disablenetconf=true;
-                        if ((QString)qApp->argv()[i] == "--debug") debug=true;
+	if (QCoreApplication::arguments().count() > 1){
+		for (int i=0; i < QCoreApplication::arguments().count();i++){
+			if ((QString)QCoreApplication::arguments()[i] == "--disablerootcheck") disablerootcheck=true;
+			if ((QString)QCoreApplication::arguments()[i] == "--setup") invokeSetup=true;
+			if ((QString)QCoreApplication::arguments()[i] == "--disablenetconf") disablenetconf=true;
+                        if ((QString)QCoreApplication::arguments()[i] == "--debug") debug=true;
 		}
 	}
 
-        QString rootcheck = (QString)getenv("HOME");
-        if (rootcheck != "/root"){
+        if (getuid() != 0){
             if (!disablerootcheck){
-                QMessageBox::information(this,"DEBUG","You have to be root to run this programm.\nTry --disablerootcheck for testing.");
+                QStringList SuCandidates;
+                QString SuCmd; 
+                SuCandidates << "kdesu" << "gksu" << "kdesudo" << "gksudo";
+                for (int i=0;i<SuCandidates.count();++i) {
+                    QString rval;
+                    rval = QStandardPaths::findExecutable(SuCandidates[i]);
+                    if (QFileInfo(rval).isExecutable()) {
+                        SuCmd = SuCandidates[i];
+                        break;
+                    }
+                }
+                if (SuCmd != QString()) {
+                    QProcess process;
+                    process.startDetached(SuCmd+QString(" ")+QCoreApplication::applicationFilePath());
+                    //process.waitForFinished(-1);
+                } else {
+                    QMessageBox::information(this,"DEBUG","You have to be root to run this programm.\nTry --disablerootcheck for testing.");
+                }
                 exit(0);
             }
         }
@@ -173,9 +190,9 @@ void kndiswrapper::initWidget(){
         QString launcher;
         launcher = "kdesu ";
         launcher = launcher + "\"kndiswrapper ";
-        if (qApp->argc() > 1){
-          for (int i=1; i < qApp->argc();i++){
-            launcher = launcher + (QString)qApp->argv()[i] + " ";
+        if (QCoreApplication::arguments().count() > 1){
+          for (int i=1; i < QCoreApplication::arguments().count();i++){
+            launcher = launcher + (QString)QCoreApplication::arguments()[i] + " ";
           }
         }
         launcher = launcher + "\" &";

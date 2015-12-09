@@ -19,6 +19,7 @@
 #include <QFont>
 #include <QDir>
 #include <QAction>
+#include <QStandardPaths>
 //#include <cstdlib>
 //#include <cstring>
 #include "ui_kndiswrapper.h"
@@ -26,7 +27,7 @@
 class kndiswrapper : public QDialog, public Ui::kndiswrapper{
 	Q_OBJECT
 public:
-	kndiswrapper(QWidget * parent = 0, Qt::WFlags f = 0);
+	kndiswrapper(QWidget * parent = 0, Qt::WindowFlags f = 0);
 	virtual ~kndiswrapper();
 
 private:
