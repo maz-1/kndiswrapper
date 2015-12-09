@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/activate.xpm</file>
+        <file>icons/adddriver.xpm</file>
+        <file>icons/close.xpm</file>
+        <file>icons/confignetwork.xpm</file>
+        <file>icons/deldriver.xpm</file>
+        <file>icons/done.xpm</file>
+        <file>icons/export.xpm</file>
+        <file>icons/info.xpm</file>
+        <file>icons/kndiswrapper_logo.xpm</file>
+        <file>icons/kndiswrapper_nok.xpm</file>
+        <file>icons/kndiswrapper_ok.xpm</file>
+        <file>icons/kndiswrapper.xpm</file>
+        <file>icons/reload.xpm</file>
+        <file>icons/restore.xpm</file>
+        <file>icons/saveas.xpm</file>
+        <file>icons/startscript.xpm</file>
+        <file>icons/stop.xpm</file>
+        <file>icons/wiki.xpm</file>
+        <file>icons/language.xpm</file>
+    </qresource>
+</RCC>

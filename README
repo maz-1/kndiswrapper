@@ -1,0 +1,14 @@
+This is a port from my old kndiswrapper app version 3.9.
+The old app was build for the KDE Desktop Version 3.5.x 
+and the old QtLibs.
+The new app changed from autoconf to qmake and uses the 
+new QtLibs.
+Feel free to test the application and send any comment
+to my eMail adress (joerg.zopes@linux-specialist.com)
+The networkconfiguration can be done through the Net
+Config menu provided by the application but I recommend
+that you do the actual network configuration with
+throught YaST or what network tool your disto uses.
+
+Have a nice Linux-day.
+Joerg Zopes
