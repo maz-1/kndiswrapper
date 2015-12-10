@@ -41,10 +41,10 @@ echo "***********************************************"
 mkdir -p ${1}/usr/share/{kndiswrapper,applications,pixmaps}
 mkdir -p ${1}/usr/bin
 
-echo "cp icons/kndiswrapper.xpm ${1}/usr/share/kndiswrapper"
-cp "$basedir/icons/kndiswrapper.xpm" ${1}/usr/share/kndiswrapper/kndiswrapper.xpm
-echo "cp icons/kndiswrapper.xpm ${1}/usr/share/pixmaps"
-cp "$basedir/icons/kndiswrapper.xpm" ${1}/usr/share/pixmaps/kndiswrapper.xpm
+echo "cp icons/kndiswrapper.svg ${1}/usr/share/kndiswrapper"
+cp "$basedir/icons/kndiswrapper.svg" ${1}/usr/share/kndiswrapper/kndiswrapper.svg
+echo "cp icons/kndiswrapper.svg ${1}/usr/share/pixmaps"
+cp "$basedir/icons/kndiswrapper.svg" ${1}/usr/share/pixmaps/kndiswrapper.svg
 echo "cp kndiswrapper ${1}/usr/bin" && cp kndiswrapper ${1}/usr/bin
 #chown root:root ${1}/usr/bin/kndiswrapper
 chmod 755 ${1}/usr/bin/kndiswrapper

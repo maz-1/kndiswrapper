@@ -175,7 +175,7 @@ With the Quit Button you exit this application.</source>
 删除驱动按钮用来删除不工作或不再使用的 Windows 驱动。
 驱动文件将会备份以在需要时能进行还原。
 
-用重新装入列表按钮可使驱动列表再次装入。更改(例如，安装的硬件)不会自动探测。
+用重载列表按钮可使驱动列表再次装入。更改(例如，安装的硬件)不会自动探测。
 
 用还原驱动按钮，您可以重新安装一个先前通过删除按钮删除的驱动。
 
@@ -196,7 +196,7 @@ With the Quit Button you exit this application.</source>
     <message>
         <location filename="../src/kndiswrapper.cpp" line="113"/>
         <source>Reload List</source>
-        <translation>重新装入列表</translation>
+        <translation>重载列表</translation>
     </message>
     <message>
         <location filename="../src/kndiswrapper.cpp" line="87"/>

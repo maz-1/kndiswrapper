@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>850</width>
-    <height>440</height>
+    <height>510</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -58,7 +58,7 @@ If you use WPA you can enter the key in HEX. Therefore you have to enter a 64-di
       </font>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Panel</enum>
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -555,7 +555,7 @@ If you use WPA you can enter the key in HEX. Therefore you have to enter a 64-di
        </property>
        <property name="icon">
         <iconset resource="../icons.qrc">
-         <normaloff>:/icons/icons/saveas.xpm</normaloff>:/icons/icons/saveas.xpm</iconset>
+         <normaloff>:/icons/icons/saveas.svg</normaloff>:/icons/icons/saveas.svg</iconset>
        </property>
       </widget>
      </item>
@@ -566,7 +566,7 @@ If you use WPA you can enter the key in HEX. Therefore you have to enter a 64-di
        </property>
        <property name="icon">
         <iconset resource="../icons.qrc">
-         <normaloff>:/icons/icons/activate.xpm</normaloff>:/icons/icons/activate.xpm</iconset>
+         <normaloff>:/icons/icons/activate.svg</normaloff>:/icons/icons/activate.svg</iconset>
        </property>
       </widget>
      </item>
@@ -577,7 +577,7 @@ If you use WPA you can enter the key in HEX. Therefore you have to enter a 64-di
        </property>
        <property name="icon">
         <iconset resource="../icons.qrc">
-         <normaloff>:/icons/icons/close.xpm</normaloff>:/icons/icons/close.xpm</iconset>
+         <normaloff>:/icons/icons/close.svg</normaloff>:/icons/icons/close.svg</iconset>
        </property>
       </widget>
      </item>
@@ -666,7 +666,7 @@ If you use WPA you can enter the key in HEX. Therefore you have to enter a 64-di
         </property>
         <property name="icon">
          <iconset resource="../icons.qrc">
-          <normaloff>:/icons/icons/stop.xpm</normaloff>:/icons/icons/stop.xpm</iconset>
+          <normaloff>:/icons/icons/stop.svg</normaloff>:/icons/icons/stop.svg</iconset>
         </property>
         <property name="checkable">
          <bool>false</bool>

@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="icons.qrc">:/icons/icons/language.xpm</pixmap>
+      <pixmap resource="icons.qrc">:/icons/icons/language.svg</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>

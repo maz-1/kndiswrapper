@@ -1,23 +1,24 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>icons/activate.xpm</file>
-        <file>icons/adddriver.xpm</file>
-        <file>icons/close.xpm</file>
-        <file>icons/confignetwork.xpm</file>
-        <file>icons/deldriver.xpm</file>
-        <file>icons/done.xpm</file>
-        <file>icons/export.xpm</file>
-        <file>icons/info.xpm</file>
-        <file>icons/kndiswrapper_logo.xpm</file>
-        <file>icons/kndiswrapper_nok.xpm</file>
-        <file>icons/kndiswrapper_ok.xpm</file>
-        <file>icons/kndiswrapper.xpm</file>
-        <file>icons/reload.xpm</file>
-        <file>icons/restore.xpm</file>
-        <file>icons/saveas.xpm</file>
-        <file>icons/startscript.xpm</file>
-        <file>icons/stop.xpm</file>
-        <file>icons/wiki.xpm</file>
-        <file>icons/language.xpm</file>
+        <file>icons/activate.svg</file>
+        <file>icons/adddriver.svg</file>
+        <file>icons/close.svg</file>
+        <file>icons/confignetwork.svg</file>
+        <file>icons/deldriver.svg</file>
+        <file>icons/done.svg</file>
+        <file>icons/export.svg</file>
+        <file>icons/info.svg</file>
+        <file>icons/kndiswrapper_logo.svg</file>
+        <file>icons/kndiswrapper_nok.svg</file>
+        <file>icons/kndiswrapper_ok.svg</file>
+        <file>icons/kndiswrapper_normal.svg</file>
+        <file>icons/kndiswrapper.svg</file>
+        <file>icons/reload.svg</file>
+        <file>icons/restore.svg</file>
+        <file>icons/saveas.svg</file>
+        <file>icons/startscript.svg</file>
+        <file>icons/stop.svg</file>
+        <file>icons/wiki.svg</file>
+        <file>icons/language.svg</file>
     </qresource>
 </RCC>

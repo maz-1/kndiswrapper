@@ -81,18 +81,18 @@ With the Quit Button you exit this application.");
 	comment->setReadOnly(true);
 
 	contextMenu = new QMenu(this);
-        contextMenu->addAction(QPixmap(":/icons/icons/adddriver.xpm"),tr("Add Driver"),this,SLOT(slot_addDriverButtonClicked()));
-        contextMenu->addAction(QPixmap(":/icons/icons/deldriver.xpm"),tr("Remove Driver"),this,SLOT(slot_removeDriverButtonClicked()));
+        contextMenu->addAction(QIcon(":/icons/icons/adddriver.svg"),tr("Add Driver"),this,SLOT(slot_addDriverButtonClicked()));
+        contextMenu->addAction(QIcon(":/icons/icons/deldriver.svg"),tr("Remove Driver"),this,SLOT(slot_removeDriverButtonClicked()));
         contextMenu->addSeparator();
-        contextMenu->addAction(QPixmap(":/icons/icons/reload.xpm"),tr("Reload List"),this,SLOT(slot_reloadButtonClicked()));
+        contextMenu->addAction(QIcon(":/icons/icons/reload.svg"),tr("Reload List"),this,SLOT(slot_reloadButtonClicked()));
         contextMenu->addSeparator();
-        contextMenu->addAction(QPixmap(":icons/icons/kndiswrapper.xpm"),tr("Module Check"),this,SLOT(slot_moduleCheckRequested()));
-        contextMenu->addAction(QPixmap(":/icons/icons/info.xpm"),tr("Info dmesg"),this,SLOT(slot_infoProcessRequested()));
-        contextMenu->addAction(QPixmap(":/icons/icons/wiki.xpm"),tr("Offline Wiki"),this,SLOT(slot_wikiRequested()));
+        contextMenu->addAction(QIcon(":icons/icons/kndiswrapper_normal.svg"),tr("Module Check"),this,SLOT(slot_moduleCheckRequested()));
+        contextMenu->addAction(QIcon(":/icons/icons/info.svg"),tr("Info dmesg"),this,SLOT(slot_infoProcessRequested()));
+        contextMenu->addAction(QIcon(":/icons/icons/wiki.svg"),tr("Offline Wiki"),this,SLOT(slot_wikiRequested()));
 
 	if (!disablenetconf){
 		contextMenu->addSeparator();
-                contextMenu->addAction(QPixmap(":/icons/icons/confignetwork.xpm"),tr("Config Network"),this,SLOT(slot_configNetworkRequested()));
+                contextMenu->addAction(QIcon(":/icons/icons/confignetwork.svg"),tr("Config Network"),this,SLOT(slot_configNetworkRequested()));
 	}
 
 	hardwareList = new QTableWidget(0,1,this);
@@ -105,31 +105,31 @@ With the Quit Button you exit this application.");
         hardwareList->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
         logoLabel = new QLabel("kndiswrapper",this);
-        logoLabel->setPixmap(QPixmap(":/icons/icons/kndiswrapper_logo.xpm"));
+        logoLabel->setPixmap(QIcon(":/icons/icons/kndiswrapper_logo.svg").pixmap(QSize(440, 40)));
 
-	addDriverButton = new QPushButton(QPixmap(":/icons/icons/adddriver.xpm"),tr("Install Driver"),this);
+	addDriverButton = new QPushButton(QIcon(":/icons/icons/adddriver.svg"),tr("Install Driver"),this);
 	addDriverButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	addDriverButton->setToolTip(tr("Install a new driver. Therefor locate the appropriate .inf file."));
 
-	removeDriverButton = new QPushButton(QPixmap(":/icons/icons/deldriver.xpm"),tr("Remove Driver"),this);
+	removeDriverButton = new QPushButton(QIcon(":/icons/icons/deldriver.svg"),tr("Remove Driver"),this);
 	removeDriverButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	removeDriverButton->setToolTip(tr("Removes the selected driver in the list."));
 
-	reloadButton = new QPushButton(QPixmap(":/icons/icons/reload.xpm"),tr("Reload List"),this);
+	reloadButton = new QPushButton(QIcon(":/icons/icons/reload.svg"),tr("Reload List"),this);
 	reloadButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	reloadButton->setToolTip(tr("Reload the content of the list"));
 
-	restoreDriverButton = new QPushButton(QPixmap(":/icons/icons/restore.xpm"),tr("Restore Driver"),this);
+	restoreDriverButton = new QPushButton(QIcon(":/icons/icons/restore.svg"),tr("Restore Driver"),this);
 	restoreDriverButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	restoreDriverButton->setToolTip(tr("Restores a removed driver."));
 
 	if (!disablenetconf){
-		configNetworkButton = new QPushButton(QPixmap(":/icons/icons/confignetwork.xpm"),tr("Config Network"),this);
+		configNetworkButton = new QPushButton(QIcon(":/icons/icons/confignetwork.svg"),tr("Config Network"),this);
 		configNetworkButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 		configNetworkButton->setToolTip(tr("Start's the network configuration dialog"));
 	}
 
-	quitButton = new QPushButton(QPixmap(":/icons/icons/stop.xpm"),tr("Quit"),this);
+	quitButton = new QPushButton(QIcon(":/icons/icons/stop.svg"),tr("Quit"),this);
 	quitButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	quitButton->setToolTip(tr("Quit the application"));
 
@@ -165,11 +165,11 @@ With the Quit Button you exit this application.");
 	getConfFlag=true;  // has to be false in the beginning ....
         this->setFixedSize(700,340);
 
-        popupLogo = new QLabel("KNDISWrapper 0.4.0\n\nSend bug reports to Joerg Zopes\n<joerg.zopes@linux-specialist.com>",this);
+        popupLogo = new QLabel("<font color=\"white\">KNDISWrapper 0.4.0<br>Send bug reports to Joerg Zopes<br>&lt;joerg.zopes@linux-specialist.com&gt;</font>",this);
         popupLogo->hide();
         popupLogo->setFont(QFont("Helvetic",14,QFont::Bold,true));
         popupLogo->setAutoFillBackground(true);
-        popupLogo->setPalette(QColor("#4a801f"));
+        popupLogo->setPalette(QColor("#147EB8"));
         popupLogo->setAlignment(Qt::AlignCenter);
         popupLogoTimer = new QTimer(this);
         popupLogoTimer->setSingleShot(true);
@@ -244,12 +244,12 @@ void kndiswrapper::addNewRow(QString listEntry){
     hardwareList->insertRow(hardwareList->rowCount());
     hardwareList->setItem(hardwareList->rowCount()-1,0,new QTableWidgetItem(listEntry));
     if (listEntry.indexOf("invalid") > 0){
-        hardwareList->item(hardwareList->rowCount()-1,0)->setIcon(QPixmap(":/icons/icons/kndiswrapper_nok.xpm"));
+        hardwareList->item(hardwareList->rowCount()-1,0)->setIcon(QIcon(":/icons/icons/kndiswrapper_nok.svg"));
     } else {
         if (listEntry.indexOf("Device present : Yes") > 0){
-            hardwareList->item(hardwareList->rowCount()-1,0)->setIcon(QPixmap(":/icons/icons/kndiswrapper_ok.xpm"));
+            hardwareList->item(hardwareList->rowCount()-1,0)->setIcon(QIcon(":/icons/icons/kndiswrapper_ok.svg"));
         } else {
-            hardwareList->item(hardwareList->rowCount()-1,0)->setIcon(QPixmap(":/icons/icons/kndiswrapper.xpm"));
+            hardwareList->item(hardwareList->rowCount()-1,0)->setIcon(QIcon(":/icons/icons/kndiswrapper_normal.svg"));
         }
     }
     hardwareList->item(hardwareList->rowCount()-1,0)->text() = listEntry;
