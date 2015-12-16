@@ -23,6 +23,10 @@
 //#include <cstdlib>
 //#include <cstring>
 #include "ui_kndiswrapper.h"
+//print debug infomation
+//#include <QDebug>
+//check root
+#include <unistd.h>
 //
 class kndiswrapper : public QDialog, public Ui::kndiswrapper{
 	Q_OBJECT
@@ -92,7 +96,6 @@ private slots:
 	void slot_restoreProcessExited();
 	void slot_infoProcessRequested();
         void slot_popupLogoTimerTimeout();
-        void slot_findNDISProcessExited();
 	void slot_configNetworkRequested();
 	void slot_addDriverButtonClicked();
 	void slot_buttonMoveTimerTimeout();

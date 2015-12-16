@@ -1,11 +1,9 @@
 #include "kndiswrapper.h"
-#include <QDebug>
-#include <unistd.h>
 //
 QString kndiswrapper::getSuCmd()
 {
     QStringList SuCandidates;
-    QString SuCmd("sudo"); 
+    QString SuCmd = QString(); 
     SuCandidates << "kdesu" << "gksu" << "kdesudo" << "gksudo";
     for (int i=0;i<SuCandidates.count();++i) {
        QString rval;
@@ -67,7 +65,6 @@ With the Quit Button you exit this application.");
                 if (SuCmd != QString()) {
                     QProcess process;
                     process.startDetached(SuCmd+QString(" ")+QCoreApplication::applicationFilePath());
-                    //process.waitForFinished(-1);
                 } else {
                     QMessageBox::information(this,"DEBUG","You have to be root to run this programm.\nTry --disablerootcheck for testing.");
                 }
@@ -106,37 +103,45 @@ With the Quit Button you exit this application.");
 
         logoLabel = new QLabel("kndiswrapper",this);
         logoLabel->setPixmap(QIcon(":/icons/icons/kndiswrapper_logo.svg").pixmap(QSize(440, 40)));
-
+        
+        //QString buttonStyleSheet("text-align:left;padding-left:5px;");
+        QString buttonStyleSheet("text-align:center;");
+        
 	addDriverButton = new QPushButton(QIcon(":/icons/icons/adddriver.svg"),tr("Install Driver"),this);
 	addDriverButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	addDriverButton->setToolTip(tr("Install a new driver. Therefor locate the appropriate .inf file."));
-
+        addDriverButton->setStyleSheet(buttonStyleSheet);
+        
 	removeDriverButton = new QPushButton(QIcon(":/icons/icons/deldriver.svg"),tr("Remove Driver"),this);
 	removeDriverButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	removeDriverButton->setToolTip(tr("Removes the selected driver in the list."));
-
+        removeDriverButton->setStyleSheet(buttonStyleSheet);
+        
 	reloadButton = new QPushButton(QIcon(":/icons/icons/reload.svg"),tr("Reload List"),this);
 	reloadButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	reloadButton->setToolTip(tr("Reload the content of the list"));
-
+        reloadButton->setStyleSheet(buttonStyleSheet);
+        
 	restoreDriverButton = new QPushButton(QIcon(":/icons/icons/restore.svg"),tr("Restore Driver"),this);
 	restoreDriverButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	restoreDriverButton->setToolTip(tr("Restores a removed driver."));
-
+        restoreDriverButton->setStyleSheet(buttonStyleSheet);
+        
 	if (!disablenetconf){
 		configNetworkButton = new QPushButton(QIcon(":/icons/icons/confignetwork.svg"),tr("Config Network"),this);
 		configNetworkButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 		configNetworkButton->setToolTip(tr("Start's the network configuration dialog"));
+                configNetworkButton->setStyleSheet(buttonStyleSheet);
 	}
 
 	quitButton = new QPushButton(QIcon(":/icons/icons/stop.svg"),tr("Quit"),this);
 	quitButton->setFont(QFont("Helvetic",10,QFont::Normal,false));
 	quitButton->setToolTip(tr("Quit the application"));
-
+        quitButton->setStyleSheet(buttonStyleSheet);
+        
 	getConfProcess = new QProcess(this);
 	restoreProcess = new QProcess(this);
 	removeProcess = new QProcess(this);
-	findNDISProcess = new QProcess(this);
 	moduleCheck = new QProcess(this);
 	moduleLoadedCheckProcess = new QProcess(this);
 	infoProcess = new QProcess(this);
@@ -150,7 +155,6 @@ With the Quit Button you exit this application.");
 	connect(restoreProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(slot_restoreProcessExited()));
 	connect(addDriverButton,SIGNAL(clicked()),this,SLOT(slot_addDriverButtonClicked()));
 	connect(removeProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(slot_removeProcessExited()));
-	connect(findNDISProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(slot_findNDISProcessExited()));
 	connect(moduleCheck,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(slot_moduleCheckProcessExited()));
         connect(hardwareList,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(slot_hardwareListRightClicked(const QPoint &)));
 	connect(moduleLoadedCheckProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(slot_moduleLoadedCheckProcessExited()));
@@ -188,27 +192,36 @@ void kndiswrapper::initWidget(){
     QString SuCmd = getSuCmd();
     if (invokeSetup){
       QProcess launcher;
-      launcher.start(SuCmd + QString(" kndiswrapper --setup"));
+      launcher.startDetached(SuCmd + QString(" \"") + QCoreApplication::applicationFilePath() + QString(" --setup\""));
       exit(0);
     }
 
     if (!disablerootcheck){
-      if ((QString)getenv("HOME") != "/root"){
+      if (getuid() != 0){
         QString launcher;
-        launcher = SuCmd + " \"kndiswrapper ";
+        launcher = SuCmd + QString(" \"") + QCoreApplication::applicationFilePath() + QString(" ");
         if (QCoreApplication::arguments().count() > 1){
           for (int i=1; i < QCoreApplication::arguments().count();i++){
             launcher += (QString)QCoreApplication::arguments()[i] + " ";
           }
         }
-        launcher += "\" &";
+        launcher += "\"";
         QProcess restart;
-        restart.start(launcher);
+        restart.startDetached(launcher);
         exit(0);
       }
     }
-
-    findNDISProcess->start("whereis ndiswrapper");
+    if (QStandardPaths::findExecutable("ndiswrapper") == QString()) {
+        QMessageBox::information(this,tr("Fatal Error"),tr("ndiswrapper not found.\nPlease install ndiswrapper before you proceed.\nProgram aborting!"));
+        exit(1);
+    } else {
+        ndiswrapperPath = QStandardPaths::findExecutable("ndiswrapper");
+        getConf();
+        moveButtonTimer->setSingleShot(true);
+        moveButtonTimer->start(8);
+        popupLogo->show();
+        popupLogoTimer->start();
+    }
 }
 
 
@@ -409,35 +422,6 @@ void kndiswrapper::slot_removeProcessExited(){
     }
     getConf();
     activateControls(addDriver|delDriver|reloadList|restoreDriver|quit|hwList|netconf);
-}
-
-void kndiswrapper::slot_findNDISProcessExited(){
-    QString line;
-    int start,end;
-
-    line = findNDISProcess->readAllStandardOutput();
-
-    if (line != "ndiswrapper:"){
-        start=line.indexOf("/");
-        end=line.indexOf(" ",start);
-        end = end - start;
-        line=line.mid(start,end);
-        ndiswrapperPath = line;
-        if (ndiswrapperPath == "") {
-            QMessageBox::information(this,tr("Fatal Error"),tr("ndiswrapper not found.\nPlease install ndiswrapper before you proceed.\nProgram aborting!"));
-            exit(1);
-        }
-        moduleLoadedCheckProcess->start("lsmod");
-    } else {
-        QMessageBox::information(this,tr("Fatal Error"),tr("ndiswrapper not found.\nPlease install ndiswrapper before you proceed.\nProgram aborting!"));
-        exit(1);
-    }
-
-    getConf();
-    moveButtonTimer->setSingleShot(true);
-    moveButtonTimer->start(8);
-    popupLogo->show();
-    popupLogoTimer->start();
 }
 
 void kndiswrapper::slot_hardwareListRightClicked(const QPoint & pos){
