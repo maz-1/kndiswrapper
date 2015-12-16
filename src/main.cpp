@@ -1,45 +1,37 @@
 #include <QApplication>
 #include <QTranslator>
+#include <QLocale>
 #include <QProcess>
 #include <QFile>
+#include <QDir>
 #include "kndiswrapper.h"
-#include "setupdialog.h"
 //
+#include <QDebug>
+//
+
 int main(int argc, char ** argv)
 {
 QString rc;
-QString tf=(QString)getenv("HOME") + "/.kndiswrapper/setup.txt";
 
     if (argc > 1) rc=(QString)argv[1];
 
     QApplication app( argc, argv );
-
-    if ((!QFile::exists(tf)) || (rc == "--setup")){
-        setupDialog * setup = new setupDialog(0);
-        setup->setModal(true);
-        setup->exec();
-        rc=setup->getResult();
-        if (rc != "") {
-            QFile * setupFile = new QFile(tf);
-            setupFile->open(QIODevice::ReadWrite);
-            QTextStream stream(setupFile);
-            rc.replace("/usr/share/kndiswrapper/","");
-            stream << rc << "\n";
-            setupFile->close();
-            exit(0);
+    
+    QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
+        if (QFile::exists(configPath) == false){
+            QDir().mkdir(configPath);
         }
-    } else {
-            rc="";
-            QFile f(tf);
-            if (f.open(QIODevice::ReadOnly)){
-              QTextStream stream(&f);
-              rc=stream.readLine();
-              f.close();
-            }
-    }
 
+        if (QFile::exists(configPath + "/netconf") == false){
+            QDir().mkdir(configPath + "/netconf");
+        }
+
+        if (QFile::exists(configPath + "/backup") == false){
+            QDir().mkdir(configPath + "/backup");
+        }
+    qDebug() << configPath;
     QTranslator translator( 0 );
-    translator.load( rc, "/usr/share/kndiswrapper" );
+    translator.load(QLocale(), QLatin1String("kndiswrapper"), QLatin1String("_"), QLatin1String("/usr/share/kndiswrapper"));
     app.installTranslator( &translator );
 
 

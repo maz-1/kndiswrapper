@@ -325,7 +325,7 @@ QStringListIterator it(processOutput.split("\n"));
 
 void kndiswrapper::slot_removeDriverButtonClicked(){
     int rc;
-    QString homePath=getenv("HOME");
+    QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
     int currentRow = hardwareList->currentRow();
     if (currentRow != -1){
         QString driver = hardwareList->item(hardwareList->currentRow(),0)->text();
@@ -335,7 +335,7 @@ void kndiswrapper::slot_removeDriverButtonClicked(){
         if (rc == QMessageBox::Yes){
             activateControls(disabled);
 //       Versuche eine Sicherungskopie des Treibers zu erstellen
-            QProcess::execute("cp -r /etc/ndiswrapper/" + driver + " " + homePath + "/.kndiswrapper/backup");
+            QProcess::execute("cp -r /etc/ndiswrapper/" + driver + " " + configPath + "/backup");
             removeProcess->start(ndiswrapperPath + " -r " + driver);
         }
     }
@@ -372,7 +372,8 @@ QString rc = "";
 }
 
 void kndiswrapper::slot_restoreDriverButtonClicked(){
-    QString homePath=(QString)getenv("HOME") + "/.kndiswrapper/backup";
+    QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
+    QString homePath=configPath + "/backup";
     QString rc;
 
     rc = QFileDialog::getOpenFileName(this,tr("Restore Drivers"),homePath,tr("INF-Files (*.inf)"));

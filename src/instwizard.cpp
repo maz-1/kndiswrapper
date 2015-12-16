@@ -4,9 +4,9 @@
 instWizard::instWizard(QWidget *parent, QString * driver) : QDialog(parent), ui(new Ui::instWizard)
 {
 QDir tempDir;
-
+QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
     ui->setupUi(this);
-    QString delPath = (QString)getenv("HOME") + (QString)"/.kndiswrapper/temp";
+    QString delPath = configPath + (QString)"/temp";
     this->setWindowTitle(tr("KNDISWrapper Installation Wizard"));
     tempDir.rmdir(delPath);
     driverRC = driver;
@@ -163,10 +163,11 @@ void instWizard::tryAgain(QString infPath, QString infFile, QString serviceBinar
 QString temp = ui->searchPath->text();
 QString path = temp;
 QDir    tempDir;
+QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
 
   infFileGlobal = infFile;
-  tempDir.mkdir((QString)"mkdir " + getenv("HOME") + "/.kndiswrapper/temp");
-  QProcess::execute("cp " + infPath + "/" + infFile + " " + getenv("HOME") + "/.kndiswrapper/temp");
+  tempDir.mkdir((QString)"mkdir " + configPath + "/temp");
+  QProcess::execute("cp " + infPath + "/" + infFile + " " + configPath + "/temp");
   ui->startSearchButton->setEnabled(false);
 
   if (temp.lastIndexOf("/") != -1) path = temp.left(temp.lastIndexOf("/"));
@@ -178,16 +179,17 @@ QDir    tempDir;
 void instWizard::slot_searchProcess2Exited(){
 QString line;
 bool found = false;
+QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
 
   while ((searchProcess2->canReadLine()) && (found == false)){
     line = searchProcess2->readLine();
     found = true;
-    QString command = "cp " + line + " " + getenv("HOME") + "/.kndiswrapper/temp";
+    QString command = "cp " + line + " " + configPath + "/temp";
     QProcess::execute(command);
   }
   if (found){
     QMessageBox::information(this,tr("Attention"),tr("Found a matching file. Try to continue the installtion"));
-    *driverRC = (QString)getenv("HOME") + (QString)"/.kndiswrapper/temp/" + infFileGlobal;
+    *driverRC = configPath + (QString)"/temp/" + infFileGlobal;
     this->done(QDialog::Accepted);
   } else {
     QMessageBox::information(this,tr("Attention"),tr("No matching file was found. Installation aborted!"));

@@ -9,6 +9,7 @@
 #include <QDialog>
 #include <QTimer>
 #include <QDir>
+#include <QStandardPaths>
 #include "wifistartup.h"
 
 namespace Ui {

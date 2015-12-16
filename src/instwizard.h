@@ -5,6 +5,7 @@
 #include <QProcess>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStandardPaths>
 #include "wikilookup.h"
 
 namespace Ui {

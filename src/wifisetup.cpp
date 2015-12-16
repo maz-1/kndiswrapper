@@ -33,8 +33,9 @@ wifiSetup::wifiSetup(QWidget *parent, QString iface) : QDialog(parent), ui(new U
     findResult = tr("Required Programms:\n\n");
 
     if (interface.indexOf('\n') != -1) interface.replace(QChar('\n'),"");
-
-    basePath = (QString)getenv("HOME") + "/.kndiswrapper/netconf/" + interface;
+    
+    QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
+    basePath = configPath + "/netconf/" + interface;
     QDir tempDir(basePath);
 
     this->setWindowTitle("Wifi-Setup");
@@ -283,7 +284,8 @@ void wifiSetup::slot_closeButtonClicked(){
 }
 
 void wifiSetup::loadConfig(){
-QDir tempDir((QString)getenv("HOME") + "/.kndiswrapper/netconf/" + interface);
+QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
+QDir tempDir(configPath + "/netconf/" + interface);
      QStringList namedFilters;
      namedFilters << "*.conf";
      tempDir.setNameFilters(namedFilters);
@@ -302,12 +304,13 @@ QString entry;
 }
 
 void wifiSetup::loadStage2(int entry){
-QString oldPath=(QString)getenv("HOME") + "/.kndiswrapper/netconf/" + ui->confComboBox->currentText() + ".conf";
+QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
+QString oldPath=configPath + "/netconf/" + ui->confComboBox->currentText() + ".conf";
 int count=0;
 QString line;
     entry = entry; // just to keep the compiler happy .... entry is not used.
 
-    filePath=(QString)getenv("HOME") + "/.kndiswrapper/netconf/" + interface + "/" + ui->confComboBox->currentText() + ".conf";
+    filePath=configPath + "/netconf/" + interface + "/" + ui->confComboBox->currentText() + ".conf";
 
     if (QFile::exists(oldPath)) QProcess::execute("mv " + oldPath + " " + filePath);
     QFile loadFile(filePath);
@@ -410,7 +413,8 @@ QString buffer = ui->confComboBox->currentText();
         ui->confComboBox->addItem(buffer);
         ui->confComboBox->setCurrentIndex(ui->confComboBox->count()-1);
       }
-      filePath = (QString)getenv("HOME") + "/.kndiswrapper/netconf/" + interface + "/" + buffer + ".conf";
+      QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
+      filePath = configPath + "/netconf/" + interface + "/" + buffer + ".conf";
       QFile saveFile(filePath);
       if (saveFile.open(QIODevice::WriteOnly)){
         QTextStream stream(&saveFile);
@@ -651,8 +655,8 @@ void wifiSetup::slot_submitButtonClicked(){
 bool valid = true;
 QString essidString = ui->essidComboBox->currentText();
     if (essidString == "") essidString="any";
-
-    QString home = (QString)getenv("HOME") + "/.kndiswrapper/netconf";
+    QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + QString("/kndiswrapper");
+    QString home = configPath + "/netconf";
 
     if (validFlag){
         QString scriptPath=home + "/ipup-" + interface + ".sh";
@@ -704,7 +708,7 @@ QString essidString = ui->essidComboBox->currentText();
                 // WPA-PSK
                     stream << "echo \"- Creating conf-file for wpa_supplicant ....\"\n# .... just for info. The Conf-File was already created by the gui\n";
                     stream << "sleep 1\n\n";
-                    QString wpaConfFilename=(QString)getenv("HOME") + "/.kndiswrapper/wpa_supplicant-" + interface + ".conf";
+                    QString wpaConfFilename=configPath + "/wpa_supplicant-" + interface + ".conf";
                     QFile wpaConfFile(wpaConfFilename);
                     if (wpaConfFile.open(QIODevice::WriteOnly)){
                         QTextStream wpaStream(&wpaConfFile);
