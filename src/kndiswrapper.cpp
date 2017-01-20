@@ -64,7 +64,7 @@ With the Quit Button you exit this application.");
                 QString SuCmd = getSuCmd();
                 if (SuCmd != QString()) {
                     QProcess process;
-                    process.startDetached(SuCmd+QString(" ")+QCoreApplication::applicationFilePath());
+                    process.startDetached(SuCmd+QString(" dbus-run-session ")+QCoreApplication::applicationFilePath());
                 } else {
                     QMessageBox::information(this,"DEBUG","You have to be root to run this programm.\nTry --disablerootcheck for testing.");
                 }
